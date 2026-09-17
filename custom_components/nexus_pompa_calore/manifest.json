@@ -1,0 +1,19 @@
+{
+  "domain": "nexus_pompa_calore",
+  "name": "Nexus Pompa di Calore",
+  "codeowners": [
+    "@Pacco24626"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http",
+    "frontend",
+    "lovelace"
+  ],
+  "documentation": "https://github.com/Pacco24626/nexus_pompa_calore",
+  "integration_type": "device",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/Pacco24626/nexus_pompa_calore/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}

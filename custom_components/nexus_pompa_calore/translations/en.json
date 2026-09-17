@@ -1,0 +1,131 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Heat pump",
+        "description": "Link the heat pump entities: the form suggests the ones recognised by name. A device is created with the «State», «Temperature difference» and «Plant map» sensors: use the map in the card.",
+        "data": {
+          "nome": "Name"
+        },
+        "sections": {
+          "temperature": {
+            "name": "Temperatures",
+            "description": "Flow and return are required: they draw the two pipes and give the temperature difference.",
+            "data": {
+              "mandata": "Flow",
+              "ritorno": "Return",
+              "esterna": "Outdoor",
+              "accumulo": "Hot water tank"
+            }
+          },
+          "funzionamento": {
+            "name": "Operation",
+            "description": "They move the drawing: water flow drives the pipes, compressor frequency spins the fan.",
+            "data": {
+              "compressore": "Compressor running",
+              "frequenza": "Compressor frequency",
+              "portata": "Water flow",
+              "sbrinamento": "Defrost running"
+            },
+            "data_description": {
+              "portata": "Without a flow sensor the pipes move at a fixed speed while the compressor runs, and the card says so.",
+              "compressore": "Decides between «running» and «idle»; without it, frequency or flow decide."
+            }
+          },
+          "altro": {
+            "name": "Efficiency and alerts",
+            "description": "Optional: shown as boxes or as chips under the drawing.",
+            "data": {
+              "cop_riscaldamento": "Heating COP",
+              "cop_sanitario": "Hot water COP",
+              "boost": "Hot water boost",
+              "vacanza": "Holiday mode",
+              "guasto": "Fault"
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "mancano_obbligatorie": "Flow and return temperatures are required.",
+      "entita_ripetuta": "The same entity is selected for two different fields."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Entities and animation",
+        "description": "Change the linked entities or the animation full scale. Rename the entry to change its name.",
+        "sections": {
+          "temperature": {
+            "name": "Temperatures",
+            "description": "Flow and return are required: they draw the two pipes and give the temperature difference.",
+            "data": {
+              "mandata": "Flow",
+              "ritorno": "Return",
+              "esterna": "Outdoor",
+              "accumulo": "Hot water tank"
+            }
+          },
+          "funzionamento": {
+            "name": "Operation",
+            "description": "They move the drawing: water flow drives the pipes, compressor frequency spins the fan.",
+            "data": {
+              "compressore": "Compressor running",
+              "frequenza": "Compressor frequency",
+              "portata": "Water flow",
+              "sbrinamento": "Defrost running"
+            },
+            "data_description": {
+              "portata": "Without a flow sensor the pipes move at a fixed speed while the compressor runs, and the card says so.",
+              "compressore": "Decides between «running» and «idle»; without it, frequency or flow decide."
+            }
+          },
+          "altro": {
+            "name": "Efficiency and alerts",
+            "description": "Optional: shown as boxes or as chips under the drawing.",
+            "data": {
+              "cop_riscaldamento": "Heating COP",
+              "cop_sanitario": "Hot water COP",
+              "boost": "Hot water boost",
+              "vacanza": "Holiday mode",
+              "guasto": "Fault"
+            }
+          },
+          "animazione": {
+            "name": "Animation",
+            "data": {
+              "riferimento": "Full-scale flow"
+            },
+            "data_description": {
+              "riferimento": "The flow above which the drawn water does not run any faster."
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "mancano_obbligatorie": "Flow and return temperatures are required.",
+      "entita_ripetuta": "The same entity is selected for two different fields."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "mappa": {
+        "name": "Plant map"
+      },
+      "stato": {
+        "name": "State",
+        "state": {
+          "guasto": "Fault",
+          "sbrinamento": "Defrost",
+          "in_marcia": "Running",
+          "fermo": "Idle"
+        }
+      },
+      "salto_termico": {
+        "name": "Temperature difference"
+      }
+    }
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Pompa di calore",
+        "description": "Collega le entita' della pompa di calore: il modulo propone quelle riconosciute dal nome. Nascono un dispositivo con i sensori «Stato», «Salto termico» e «Mappa impianto»: la mappa e' quella da indicare nella card.",
+        "data": {
+          "nome": "Nome"
+        },
+        "sections": {
+          "temperature": {
+            "name": "Temperature",
+            "description": "Mandata e ritorno sono obbligatorie: disegnano le due tubazioni e danno il salto termico.",
+            "data": {
+              "mandata": "Mandata",
+              "ritorno": "Ritorno",
+              "esterna": "Esterna",
+              "accumulo": "Accumulo ACS"
+            }
+          },
+          "funzionamento": {
+            "name": "Funzionamento",
+            "description": "Muovono il disegno: la portata fa scorrere l'acqua, la frequenza fa girare la ventola.",
+            "data": {
+              "compressore": "Compressore attivo",
+              "frequenza": "Frequenza del compressore",
+              "portata": "Portata dell'acqua",
+              "sbrinamento": "Sbrinamento attivo"
+            },
+            "data_description": {
+              "portata": "Senza portata il flusso si muove a velocita' fissa quando il compressore gira, e la card lo dichiara.",
+              "compressore": "Decide lo stato «in marcia» o «fermo»; se manca decidono frequenza o portata."
+            }
+          },
+          "altro": {
+            "name": "Rendimento e segnalazioni",
+            "description": "Facoltative: compaiono come riquadri o come tessere sotto il disegno.",
+            "data": {
+              "cop_riscaldamento": "COP riscaldamento",
+              "cop_sanitario": "COP sanitario",
+              "boost": "Boost ACS",
+              "vacanza": "Modalita' vacanza",
+              "guasto": "Guasto"
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "mancano_obbligatorie": "Mandata e ritorno sono obbligatorie.",
+      "entita_ripetuta": "La stessa entita' e' scelta per due voci diverse."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Entita' e animazione",
+        "description": "Cambia le entita' collegate o il fondo scala delle animazioni. Il nome si cambia rinominando la voce.",
+        "sections": {
+          "temperature": {
+            "name": "Temperature",
+            "description": "Mandata e ritorno sono obbligatorie: disegnano le due tubazioni e danno il salto termico.",
+            "data": {
+              "mandata": "Mandata",
+              "ritorno": "Ritorno",
+              "esterna": "Esterna",
+              "accumulo": "Accumulo ACS"
+            }
+          },
+          "funzionamento": {
+            "name": "Funzionamento",
+            "description": "Muovono il disegno: la portata fa scorrere l'acqua, la frequenza fa girare la ventola.",
+            "data": {
+              "compressore": "Compressore attivo",
+              "frequenza": "Frequenza del compressore",
+              "portata": "Portata dell'acqua",
+              "sbrinamento": "Sbrinamento attivo"
+            },
+            "data_description": {
+              "portata": "Senza portata il flusso si muove a velocita' fissa quando il compressore gira, e la card lo dichiara.",
+              "compressore": "Decide lo stato «in marcia» o «fermo»; se manca decidono frequenza o portata."
+            }
+          },
+          "altro": {
+            "name": "Rendimento e segnalazioni",
+            "description": "Facoltative: compaiono come riquadri o come tessere sotto il disegno.",
+            "data": {
+              "cop_riscaldamento": "COP riscaldamento",
+              "cop_sanitario": "COP sanitario",
+              "boost": "Boost ACS",
+              "vacanza": "Modalita' vacanza",
+              "guasto": "Guasto"
+            }
+          },
+          "animazione": {
+            "name": "Animazione",
+            "data": {
+              "riferimento": "Portata di fondo scala"
+            },
+            "data_description": {
+              "riferimento": "La portata oltre la quale il flusso disegnato non corre piu' veloce."
+            }
+          }
+        }
+      }
+    },
+    "error": {
+      "mancano_obbligatorie": "Mandata e ritorno sono obbligatorie.",
+      "entita_ripetuta": "La stessa entita' e' scelta per due voci diverse."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "mappa": {
+        "name": "Mappa impianto"
+      },
+      "stato": {
+        "name": "Stato",
+        "state": {
+          "guasto": "Guasto",
+          "sbrinamento": "Sbrinamento",
+          "in_marcia": "In marcia",
+          "fermo": "Fermo"
+        }
+      },
+      "salto_termico": {
+        "name": "Salto termico"
+      }
+    }
+  }
+}
