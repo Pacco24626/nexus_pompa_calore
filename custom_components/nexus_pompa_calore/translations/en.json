@@ -127,5 +127,11 @@
         "name": "Temperature difference"
       }
     }
+  },
+  "issues": {
+    "entita_sparite": {
+      "title": "Values no longer published: {nome}",
+      "description": "These configured slots point to entities that no longer exist: **{voci}**.\n\nThis happens when the gateway stops publishing a value the system cannot feed - for example a cloud-connected heat pump, which provides no frequency, no flow, no COP and no switches.\n\nNothing was changed automatically. Open the integration options and remove the slots you no longer need, or point them at another entity."
+    }
   }
 }

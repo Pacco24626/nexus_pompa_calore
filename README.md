@@ -66,6 +66,14 @@ Da **Configura** si cambiano le entità e il **fondo scala** delle animazioni (p
 
 Se rinomini un'entità collegata, il collegamento si aggiorna da solo.
 
+Se invece un'entità **sparisce** — dalla V0.8.62 il gateway Nexus-T pubblica solo le
+grandezze che l'impianto alimenta davvero e ritira le altre, e con una pompa di calore
+collegata al cloud restano quattro entità su dodici — Home Assistant apre un avviso in
+**Impostazioni → Sistema → Riparazioni** che dice quali voci sono rimaste senza entità.
+Non viene sganciato niente da solo: la configurazione è di chi ha installato, e la
+modifica la fa lui da *Configura*. Finché non lo fa, la card scrive «assente» su quelle
+voci invece di disegnare un valore vecchio.
+
 ## Cosa non fa
 
 - **Non inventa la modalità.** La card mostra il flusso e le temperature, non un'etichetta

@@ -67,7 +67,7 @@ v("senza mappe: stringa vuota", trovaMappa({ states: {} }) === "");
 v("ruolo della mappa", RUOLO_MAPPA === "mappa_pompa_calore");
 v("la card si registra col suo nome", Boolean(definite["nexus-pompa-calore-card"]) && Boolean(definite["nexus-pompa-calore-card-editor"]));
 v("e si annuncia nel selettore delle card", window.customCards.some((c) => c.type === "nexus-pompa-calore-card" && c.preview === true));
-v("versione della card allineata al manifest", VERSIONE_CARD === "1.0.0");
+v("versione della card allineata al manifest", VERSIONE_CARD === "1.1.0");
 v("proposta di configurazione dal selettore", definite["nexus-pompa-calore-card"].getStubConfig(hass).entity === "sensor.mia_mappa");
 
 console.log("\n4. Pompa di calore");
@@ -80,6 +80,26 @@ v("acqua fredda blu, tiepida azzurra", coloreAcs(st(22)) === "#3C84C6" && colore
 v("acqua calda ambra, bollente rossa", coloreAcs(st(44)) === "#E39B32" && coloreAcs(st(55)) === "#DE4A51");
 v("senza lettura niente colore", coloreAcs(st("unavailable")) === null);
 v("la card non ricalcola il salto termico: niente funzione deltaT", carta.deltaT === undefined);
+
+console.log("\n5. Voci ritirate dal gateway");
+{
+  // Il clic su una voce apre la finestra informazioni di Home Assistant. Se
+  // l'entita' e' stata ritirata quella finestra viene su vuota, e sembra un
+  // guasto della card: meglio non aprirla.
+  const Card = definite["nexus-pompa-calore-card"];
+  const scheda = Object.create(Card.prototype);
+  scheda._hass = { states: { "sensor.viva": { entity_id: "sensor.viva", state: "29.5", attributes: {} } } };
+  scheda._entita = () => ({ mandata: "sensor.viva", portata: "sensor.ritirata" });
+  const aperte = [];
+  scheda.dispatchEvent = (evento) => aperte.push(evento.detail.entityId);
+
+  scheda._apri("mandata");
+  v("voce viva: la finestra informazioni si apre", aperte.length === 1 && aperte[0] === "sensor.viva");
+  scheda._apri("portata");
+  v("voce ritirata: non si apre niente", aperte.length === 1);
+  scheda._apri("accumulo");
+  v("voce non configurata: non si apre niente", aperte.length === 1);
+}
 
 const totale = passate + fallite.length;
 console.log(fallite.length ? `\nCARD: ${passate}/${totale} superate` : `\nCARD: TUTTI I CONTROLLI SUPERATI (${totale})`);

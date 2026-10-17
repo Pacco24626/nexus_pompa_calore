@@ -34,6 +34,11 @@ def prepara():
     hass.stati.imposta(ENTITA["compressore"], "off")
     hass.stati.imposta(ENTITA["sbrinamento"], "off")
     hass.stati.imposta("light.salotto", "off")
+    # In Home Assistant un'entita' MQTT ha anche una voce nel registro: e' da li'
+    # che si capisce se e' stata ritirata davvero o se semplicemente non ha
+    # ancora uno stato.
+    for entity_id in (*ENTITA.values(), "light.salotto"):
+        hass.registro.aggiungi(entity_id, "mqtt")
     entry = Entry({"entita": dict(ENTITA)}, title="Centrale Termica", entry_id="pdc1")
     return hass, entry
 
@@ -122,6 +127,67 @@ async def main():
     await minimo.async_start()
     b.v("salto termico calcolato", minimo.derivate["salto_termico"] == 5.0)
     b.v("stato sconosciuto: niente di cui fidarsi", minimo.derivate["stato"] is None)
+
+    b.sezione("8. Entita' ritirate dal gateway (0.8.62)")
+    # Dalla 0.8.62 il gateway pubblica solo le grandezze che l'impianto
+    # alimenta e ritira le altre: con un collegamento al cloud restano quattro
+    # entita' su dodici. L'elenco pero' sta nella NOSTRA configurazione, e
+    # continuerebbe a puntare al vuoto senza dire niente a nessuno.
+    hass, entry = prepara()
+    impianto = Impianto(hass, entry)
+    await impianto.async_start()
+    b.v("impianto intero: nessun avviso", not hass.avvisi.aperti)
+
+    hass.registro.async_remove(ENTITA["portata"])
+    hass.bus.spara(finto_ha.EVENT_ENTITY_REGISTRY_UPDATED,
+                   {"action": "remove", "entity_id": ENTITA["portata"]})
+    aperti = list(hass.avvisi.aperti.items())
+    b.v("entita' ritirata: si apre un avviso di riparazione", len(aperti) == 1)
+    dati = aperti[0][1] if aperti else {}
+    b.v("l'avviso dice quale voce, di quale impianto, ed e' un avvertimento",
+        dati.get("translation_key") == "entita_sparite"
+        and dati.get("translation_placeholders", {}).get("voci") == "portata"
+        and dati.get("translation_placeholders", {}).get("nome") == "Centrale Termica"
+        and dati.get("severity") == "warning"
+        and dati.get("is_fixable") is False)
+    b.v("ma la configurazione non si sgancia da sola: decide chi ha installato",
+        impianto.entita.get("portata") == ENTITA["portata"])
+
+    hass.registro.aggiungi(ENTITA["portata"], "mqtt")
+    hass.bus.spara(finto_ha.EVENT_ENTITY_REGISTRY_UPDATED,
+                   {"action": "create", "entity_id": ENTITA["portata"]})
+    b.v("entita' tornata: l'avviso si chiude da solo", not hass.avvisi.aperti)
+
+    # Controllo che discrimina: senza STATO ma con la voce nel registro non e'
+    # una sparizione. All'avvio di Home Assistant capita di continuo - MQTT che
+    # non e' ancora pronto - e un avviso li' insegnerebbe a ignorare gli avvisi.
+    hass, entry = prepara()
+    hass.stati._stati.pop(ENTITA["portata"], None)
+    senza_stato = Impianto(hass, entry)
+    await senza_stato.async_start()
+    b.v("senza stato ma nel registro: nessun avviso", not hass.avvisi.aperti)
+
+    # Il ritiro puo' essere successo mentre Home Assistant era spento: all'avvio
+    # non c'e' nessun evento da aspettare, si guarda e basta.
+    hass, entry = prepara()
+    hass.registro.async_remove(ENTITA["compressore"])
+    spenta = Impianto(hass, entry)
+    await spenta.async_start()
+    b.v("sparita a Home Assistant spento: l'avviso c'e' lo stesso",
+        len(hass.avvisi.aperti) == 1)
+
+    # Controllo di sanita': un rinomino non e' una sparizione.
+    hass, entry = prepara()
+    rinominata = Impianto(hass, entry)
+    await rinominata.async_start()
+    hass.registro.entities.pop(ENTITA["ritorno"], None)
+    hass.registro.aggiungi("sensor.ritorno_nuovo", "mqtt")
+    hass.bus.spara(finto_ha.EVENT_ENTITY_REGISTRY_UPDATED,
+                   {"action": "update", "entity_id": "sensor.ritorno_nuovo",
+                    "old_entity_id": ENTITA["ritorno"], "changes": {}})
+    b.v("rinomino: nessun avviso, e il collegamento segue il nome nuovo",
+        not hass.avvisi.aperti
+        and entry.options.get("entita", {}).get("ritorno") == "sensor.ritorno_nuovo")
 
 
 asyncio.run(main())

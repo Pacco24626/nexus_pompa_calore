@@ -127,5 +127,11 @@
         "name": "Salto termico"
       }
     }
+  },
+  "issues": {
+    "entita_sparite": {
+      "title": "Grandezze non piu' pubblicate: {nome}",
+      "description": "Queste voci della configurazione puntano a entita' che non esistono piu': **{voci}**.\n\nSuccede quando il gateway smette di pubblicare una grandezza che l'impianto non alimenta - per esempio con una pompa di calore collegata al cloud, che non da' frequenza, portata, COP ne' gli interruttori.\n\nNon e' stato cambiato niente da solo. Apri le opzioni dell'integrazione e togli le voci che non servono piu', oppure collegale a un'altra entita'."
+    }
   }
 }
